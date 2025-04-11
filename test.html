@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>이벤트 퀴즈</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 30px; }
+    .result { margin-top: 20px; font-size: 1.2em; font-weight: bold; }
+    .question-box { margin-top: 30px; }
+    .hidden { display: none; }
+    .explanation { color: #333; margin-top: 10px; font-size: 0.95em; }
+    button { padding: 10px 20px; font-size: 1.2em; background-color: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 5px; }
+    button:hover { background-color: #45a049; }
+  </style>
+</head>
+<body>
+
+  <div id="quizContainer">
+    <!-- 문제 1 -->
+    <div class="question-box" id="question1">
+      <p><strong>문제 1:</strong> 외부식음료 반입 규칙은?</p>
+      <form id="quizForm1">
+        <input type="radio" name="answer1" value="A" id="a1">
+        <label for="a1">A. 반입이 가능하다</label><br>
+
+        <input type="radio" name="answer1" value="B" id="b1">
+        <label for="b1">B. 반입이 불가능하다</label><br>
+
+        <input type="radio" name="answer1" value="C" id="c1">
+        <label for="c1">C. 장소가 다르면 괜찮다</label><br>
+
+        <input type="radio" name="answer1" value="D" id="d1">
+        <label for="d1">D. 2층에서 구매한 카페음료는 가능하다</label><br><br>
+
+        <button type="button" onclick="checkAnswer(1)">제출하기</button>
+      </form>
+      <div class="explanation hidden" id="explanation1">외부 식음료는 물론 2층 카페의 음료 역시 도서관 내에 반입이 불가능합니다.</div>
+    </div>
+
+    <!-- 문제 2 -->
+    <div class="question-box hidden" id="question2">
+      <p><strong>문제 2:</strong> 도서 대출 규칙은?</p>
+      <form id="quizForm2">
+        <input type="radio" name="answer2" value="A" id="a2">
+        <label for="a2">A. 한 사람당 7권, 10일 빌릴 수 있고, 연장은 한 번 가능하다</label><br>
+
+        <input type="radio" name="answer2" value="B" id="b2">
+        <label for="b2">B. 한 사람당 5권, 7일 빌릴 수 있다</label><br>
+
+        <input type="radio" name="answer2" value="C" id="c2">
+        <label for="c2">C. 한 사람당 10권, 14일 빌릴 수 있다</label><br>
+
+        <input type="radio" name="answer2" value="D" id="d2">
+        <label for="d2">D. 연장은 두 번 가능하다</label><br><br>
+
+        <button type="button" onclick="checkAnswer(2)">제출하기</button>
+      </form>
+      <div class="explanation hidden" id="explanation2">학부생의 경우 1인당 7권을 10일간 빌릴 수 있으며 연장 1번 가능합니다.</div>
+    </div>
+
+    <!-- 문제 3 -->
+    <div class="question-box hidden" id="question3">
+      <p><strong>문제 3:</strong> 공부를 위해 열람실을 빌려서 사용한 당신! 다 사용한 이후엔 어떻게 해야 할까요?</p>
+      <form id="quizForm3">
+        <input type="radio" name="answer3" value="A" id="a3">
+        <label for="a3">A. 자리에 쓰레기가 있는지 확인하고 정리 후 도서관을 나간다.</label><br>
+
+        <input type="radio" name="answer3" value="B" id="b3">
+        <label for="b3">B. 공부가 끝나 즐거운 마음으로 열람좌석 반납을 누르고 나간다.</label><br>
+
+        <input type="radio" name="answer3" value="C" id="c3">
+        <label for="c3">C. 공부가 끝나 가벼운 마음으로 뒤도 돌아보지 않고 나간다.</label><br>
+
+        <input type="radio" name="answer3" value="D" id="d3">
+        <label for="d3">D. 오늘은 공부를 못 끝냈지만 나에겐 내일이 있다 생각하며 집으로 향한다.</label><br><br>
+
+        <button type="button" onclick="checkAnswer(3)">제출하기</button>
+      </form>
+      <div class="explanation hidden" id="explanation3">공부가 끝났다면 다음 사람들을 위해 자리를 깨끗하게 치워주시고 열람 좌석 반납을 누르고 나가야 해요! <br> 만약 열람 좌석을 누르지 않으면 이용 제재가 된답니다.</div>
+    </div>
+
+    <div class="result" id="result"></div>
+    <button id="resetButton" class="hidden" onclick="resetQuiz()">퀴즈 다시 시작</button>
+  </div>
+
+  <script>
+    let currentQuestion = 1;
+    let correctCount = 0;
+
+    window.onload = function() {
+      showQuestion(1);
+    };
+
+    function showQuestion(questionNumber) {
+      document.querySelectorAll('.question-box').forEach((question) => {
+        question.classList.add('hidden');
+      });
+      document.getElementById(`question${questionNumber}`).classList.remove('hidden');
+    }
+
+    function checkAnswer(questionNumber) {
+      const selected = document.querySelector(`input[name="answer${questionNumber}"]:checked`);
+      const result = document.getElementById('result');
+      const explanation = document.getElementById(`explanation${questionNumber}`);
+
+      if (!selected) {
+        result.textContent = "정답을 선택해주세요!";
+        return;
+      }
+
+      let correctAnswer = "";
+      if (questionNumber === 1) correctAnswer = "B";
+      else if (questionNumber === 2) correctAnswer = "A";
+      else if (questionNumber === 3) correctAnswer = "B";
+
+      explanation.classList.remove("hidden");
+
+      if (selected.value === correctAnswer) {
+        correctCount++;
+        result.innerHTML = "✅ 정답입니다!";
+      } else {
+        result.textContent = "❌ 틀렸어요! 다시 시도해보세요.";
+      }
+
+      setTimeout(() => {
+        result.textContent = "";
+        explanation.classList.add("hidden");
+        nextQuestion();
+      }, 2000);
+    }
+
+    function nextQuestion() {
+      if (currentQuestion === 1) {
+        showQuestion(2);
+      } else if (currentQuestion === 2) {
+        showQuestion(3);
+      } else if (currentQuestion === 3) {
+        document.getElementById('result').innerHTML =
+          `🎉 퀴즈 완료! 🎉<br>
+          정답 개수: ${correctCount} / 3<br>
+          축하합니다! <br>
+          이 화면을 사서 선생님께 보여주세요! <br>
+          아! 화면을 보여주면서 정답의 숫자도 말해주셔야 도장을 받을 수 있답니다!<br>
+          혹시 전부 찍은 건 아니죠? ㅠㅅㅠ`;
+
+        document.getElementById('resetButton').classList.remove('hidden');
+        document.getElementById('question3').classList.add('hidden');
+      }
+
+      currentQuestion++;
+    }
+
+    function resetQuiz() {
+      currentQuestion = 1;
+      correctCount = 0;
+
+      document.querySelectorAll('input[type="radio"]:checked').forEach(input => input.checked = false);
+      document.querySelectorAll('.explanation').forEach(div => div.classList.add('hidden'));
+      document.getElementById('result').textContent = "";
+      document.getElementById('resetButton').classList.add('hidden');
+      showQuestion(1);
+    }
+  </script>
+
+</body>
+</html>
